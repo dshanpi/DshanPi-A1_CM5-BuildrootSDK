@@ -1,0 +1,1 @@
+cmd_drivers/net/wireless/aic8800/aic8800_btlpm/aic8800_btlpm.mod := printf '%s\n'   aic_bluetooth_main.o rfkill.o | awk '!x[$$0]++ { print("drivers/net/wireless/aic8800/aic8800_btlpm/"$$0) }' > drivers/net/wireless/aic8800/aic8800_btlpm/aic8800_btlpm.mod

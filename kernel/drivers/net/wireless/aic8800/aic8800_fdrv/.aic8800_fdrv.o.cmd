@@ -1,0 +1,1 @@
+cmd_drivers/net/wireless/aic8800/aic8800_fdrv/aic8800_fdrv.o := /home/ubuntu/100ask-rk3576_SDK/prebuilts/gcc/linux-x86/aarch64/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-ld -EL  -maarch64elf -z noexecstack   -r -o drivers/net/wireless/aic8800/aic8800_fdrv/aic8800_fdrv.o @drivers/net/wireless/aic8800/aic8800_fdrv/aic8800_fdrv.mod 
