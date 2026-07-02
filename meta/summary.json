@@ -1,0 +1,17 @@
+{
+  "root": "/home/ubuntu/RK3576-SDK/rk3576_linux6.1_release_v1.0.0_20240620",
+  "package": "/home/ubuntu/RK3576-SDK/rk3576_linux6.1_release_v1.0.0_20240620/dshanpi-a1-cm5",
+  "overlay_files": 1028,
+  "delete_entries": 0,
+  "skipped_entries": 24,
+  "exclude_top": [
+    "bak",
+    "dshanpi-a1-cm5",
+    "out"
+  ],
+  "exclude_prefixes": [
+    "prebuilt/rootfsbuilt/",
+    ".local_patch/"
+  ],
+  "target_cache_rule": "exclude target dirs except openwrt/target and openwrt/openwrt/target"
+}
