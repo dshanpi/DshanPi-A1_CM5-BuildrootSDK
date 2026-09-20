@@ -12,9 +12,11 @@
 //#include "rk3576-100ask-480-800-mipi.dtsi"
 //#include "rk3576-100ask-imx415-csi3.dtsi"
 //#include "rk3576-100ask-ov13850-csi3.dtsi"
+#include "rk3576-100ask-ov13850-3cam.dtsi"
 //#include "rk3576-100ask-rk628d.dtsi"
 //#include "rk3576-100ask-480-360-mipi.dtsi"
 #include "rk3576-100ask-1024-768-mipi.dtsi"
+#include "rk3576-100ask-a1-cm5-base-v1.dtsi"
 
 / {
 	model = "Rockchip RK3576 DshanPi A1 Board";
@@ -95,4 +97,3 @@
 	pinctrl-names = "defauit";
 	status = "okay";
 };
-

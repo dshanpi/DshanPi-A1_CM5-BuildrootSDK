@@ -1,0 +1,7 @@
+# Use Rockchip's rk3576_spl_v1.08 MiniLoader.  The source-built SPL used by
+# RK_UBOOT_SPL does not reliably re-initialize SDMMC0 after BootROM on the
+# A1-CM5 base, while v1.08 explicitly includes RK3576 SDMMC pinctrl support.
+# RK_UBOOT_SPL is not set
+RK_KERNEL_DTS_NAME="rk3576-100ask-dshanpi-a1-linux"
+RK_USE_FIT_IMG=y
+RK_WIFIBT=n

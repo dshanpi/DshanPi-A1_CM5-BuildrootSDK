@@ -1,0 +1,14 @@
+diff --git a/configs/rockchip_rk3576_defconfig b/configs/rockchip_rk3576_defconfig
+index 5b47b07c43..ef1b5e1b8e 100644
+--- a/configs/rockchip_rk3576_defconfig
++++ b/configs/rockchip_rk3576_defconfig
+@@ -23,3 +23,9 @@
+ #include "npu2.config"
+ #include "powermanager.config"
+ #include "weston.config"
++BR2_PACKAGE_GPTFDISK=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_PACKAGE_LIBBLOCKDEV=y
++BR2_PACKAGE_LIBBLOCKDEV_NVME=y
++BR2_PACKAGE_LIBGPIOD=y
++BR2_PACKAGE_LIBGPIOD_TOOLS=y

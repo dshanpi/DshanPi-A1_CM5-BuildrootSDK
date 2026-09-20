@@ -1,1 +1,0 @@
-cmd_drivers/net/wireless/aic8800/built-in.a := rm -f drivers/net/wireless/aic8800/built-in.a;  /home/ubuntu/100ask-rk3576_SDK/prebuilts/gcc/linux-x86/aarch64/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-ar cDPrST drivers/net/wireless/aic8800/built-in.a

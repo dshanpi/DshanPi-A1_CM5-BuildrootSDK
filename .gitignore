@@ -1,0 +1,21 @@
+# SDK build products
+*.o
+*.a
+*.ko
+*.mod
+*.mod.c
+*.mod.o
+*.cmd
+modules.order
+Module.symvers
+
+# Images and local logs
+*.img
+*.log
+output/
+tmp/
+
+# Editor and OS files
+.DS_Store
+*.swp
+*~

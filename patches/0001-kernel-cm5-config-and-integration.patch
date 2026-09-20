@@ -1,0 +1,71 @@
+diff --git a/arch/arm64/configs/rk3576.config b/arch/arm64/configs/rk3576.config
+index 800fb0234c19..97373e7d6dc5 100644
+--- a/arch/arm64/configs/rk3576.config
++++ b/arch/arm64/configs/rk3576.config
+@@ -1 +1,2 @@
+ # CONFIG_MALI_CSF_SUPPORT is not set
++CONFIG_AIC8800_BTLPM_SUPPORT=m
+diff --git a/arch/arm64/configs/rockchip_linux_defconfig b/arch/arm64/configs/rockchip_linux_defconfig
+index f2f3abb7440a..cb92e2fc8322 100644
+--- a/arch/arm64/configs/rockchip_linux_defconfig
++++ b/arch/arm64/configs/rockchip_linux_defconfig
+@@ -215,6 +216,9 @@ CONFIG_RK630_PHY=y
+ CONFIG_CANFD_RK3576=y
+ CONFIG_USB_RTL8150=y
+ CONFIG_USB_RTL8152=y
++CONFIG_AIC_WLAN_SUPPORT=y
++CONFIG_AIC8800_WLAN_SUPPORT=m
++CONFIG_AIC8800_BTLPM_SUPPORT=m
+ CONFIG_WL_ROCKCHIP=y
+ CONFIG_WIFI_BUILD_MODULE=y
+ CONFIG_AP6XXX=m
+@@ -229,8 +233,8 @@ CONFIG_MOUSE_CYAPA=y
+ CONFIG_MOUSE_ELAN_I2C=y
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=y
++CONFIG_TOUCHSCREEN_GOODIX=y
+ CONFIG_TOUCHSCREEN_GSL3673=y
+-CONFIG_TOUCHSCREEN_GT1X=y
+ CONFIG_TOUCHSCREEN_ELAN=y
+ CONFIG_TOUCHSCREEN_USB_COMPOSITE=y
+ CONFIG_ROCKCHIP_REMOTECTL=y
+@@ -276,6 +280,7 @@ CONFIG_CHARGER_BQ24735=y
+ CONFIG_CHARGER_BQ25700=y
+ CONFIG_BATTERY_RK817=y
+ CONFIG_CHARGER_RK817=y
++CONFIG_SENSORS_PWM_FAN=y
+ CONFIG_THERMAL=y
+ CONFIG_THERMAL_WRITABLE_TRIPS=y
+ CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR=y
+@@ -419,6 +424,7 @@ CONFIG_SND_SOC_ROCKCHIP_MAX98090=y
+ CONFIG_SND_SOC_ROCKCHIP_MULTICODECS=y
+ CONFIG_SND_SOC_ROCKCHIP_RT5645=y
+ CONFIG_SND_SOC_ROCKCHIP_HDMI=y
++CONFIG_SND_SOC_BT_SCO=y
+ CONFIG_SND_SOC_DUMMY_CODEC=y
+ CONFIG_SND_SOC_ES7202=y
+ CONFIG_SND_SOC_ES7243E=y
+diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
+index a6fdd9dda9ff..64ce5b567c61 100644
+--- a/drivers/net/wireless/Kconfig
++++ b/drivers/net/wireless/Kconfig
+@@ -31,6 +31,7 @@ source "drivers/net/wireless/microchip/Kconfig"
+ source "drivers/net/wireless/purelifi/Kconfig"
+ source "drivers/net/wireless/ralink/Kconfig"
+ source "drivers/net/wireless/realtek/Kconfig"
++source "drivers/net/wireless/aic8800/Kconfig"
+ source "drivers/net/wireless/rsi/Kconfig"
+ source "drivers/net/wireless/silabs/Kconfig"
+ source "drivers/net/wireless/st/Kconfig"
+diff --git a/drivers/net/wireless/Makefile b/drivers/net/wireless/Makefile
+index ac7a55bd9e11..726d631a1069 100644
+--- a/drivers/net/wireless/Makefile
++++ b/drivers/net/wireless/Makefile
+@@ -22,6 +22,7 @@ obj-$(CONFIG_WLAN_VENDOR_SILABS) += silabs/
+ obj-$(CONFIG_WLAN_VENDOR_ST) += st/
+ obj-$(CONFIG_WLAN_VENDOR_TI) += ti/
+ obj-$(CONFIG_WLAN_VENDOR_ZYDAS) += zydas/
++obj-$(CONFIG_AIC_WLAN_SUPPORT) += aic8800/
+ 
+ # 16-bit wireless PCMCIA client drivers
+ obj-$(CONFIG_PCMCIA_RAYCS)	+= ray_cs.o

@@ -1,1 +1,0 @@
-cmd_drivers/net/wireless/aic8800/modules.order := {   cat drivers/net/wireless/aic8800/aic8800_btlpm/modules.order;   cat drivers/net/wireless/aic8800/aic8800_fdrv/modules.order;   cat drivers/net/wireless/aic8800/aic8800_bsp/modules.order; :; } > drivers/net/wireless/aic8800/modules.order

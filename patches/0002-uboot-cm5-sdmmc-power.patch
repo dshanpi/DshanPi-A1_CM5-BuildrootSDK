@@ -1,0 +1,101 @@
+diff --git a/arch/arm/dts/rk3576-u-boot.dtsi b/arch/arm/dts/rk3576-u-boot.dtsi
+index fc7527064a..dfa99835ed 100644
+--- a/arch/arm/dts/rk3576-u-boot.dtsi
++++ b/arch/arm/dts/rk3576-u-boot.dtsi
+@@ -138,6 +138,15 @@
+ 
+ &sdmmc {
+ 	bus-width = <4>;
++	/*
++	 * U29 (MT9700) powers the CM5 base microSD socket.  BootROM leaves the
++	 * card usable, but handing GPIO0_B6 back to the DW-MMC PWREN function
++	 * can briefly remove power while SPL probes the controller.  Keep the
++	 * enable asserted as a GPIO for the whole SPL boot instead.
++	 */
++	pinctrl-0 = <&sdmmc0_clk &sdmmc0_cmd &sdmmc0_bus4
++		     &sdmmc0_pwren_gpio>;
++	rockchip,power-on-delay-ms = <20>;
+ 	u-boot,dm-spl;
+ 	status = "okay";
+ };
+@@ -177,6 +186,20 @@
+ 
+ &pinctrl {
+ 	u-boot,dm-spl;
++
++	sdmmc0-cm5-power {
++		u-boot,dm-spl;
++
++		sdmmc0_pwren_gpio: sdmmc0-pwren-gpio {
++			u-boot,dm-spl;
++			rockchip,pins = <0 RK_PB6 RK_FUNC_GPIO
++					 &pcfg_output_high>;
++		};
++	};
++};
++
++&pcfg_output_high {
++	u-boot,dm-spl;
+ };
+ 
+ &pcfg_pull_up_drv_level_2 {
+diff --git a/arch/arm/dts/rk3576.dtsi b/arch/arm/dts/rk3576.dtsi
+index f8598e529a..c9740769ef 100644
+--- a/arch/arm/dts/rk3576.dtsi
++++ b/arch/arm/dts/rk3576.dtsi
+@@ -3180,11 +3180,19 @@
+ 		clock-names = "biu", "ciu";
+ 		fifo-depth = <0x100>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&sdmmc0_clk &sdmmc0_cmd &sdmmc0_det &sdmmc0_bus4 &sdmmc0_pwren>;
++		/*
++		 * The CM5 base powers the microSD socket through U29 (MT9700).
++		 * Its active-high enable is SDMMC0_PWREN_H, so SPL must keep the
++		 * dedicated power-enable pin muxed while it reinitializes the card.
++		 * Card detect is intentionally not required during early boot because
++		 * different socket variants use different mechanical CD contacts.
++		 */
++		pinctrl-0 = <&sdmmc0_clk &sdmmc0_cmd &sdmmc0_bus4
++			     &sdmmc0_pwren>;
+ 		resets = <&cru SRST_H_SDMMC0>;
+ 		reset-names = "reset";
+ 		rockchip,use-v2-tuning;
+-		status = "disabled";
++		status = "okay";
+ 	};
+ 
+ 	sdio: mmc@2a320000 {
+diff --git a/drivers/mmc/dw_mmc.c b/drivers/mmc/dw_mmc.c
+index 8dc40cf629..ff46b66e86 100644
+--- a/drivers/mmc/dw_mmc.c
++++ b/drivers/mmc/dw_mmc.c
+@@ -795,10 +795,12 @@ static int dwmci_init(struct mmc *mmc)
+ 	struct dwmci_host *host = mmc->priv;
+ 	uint32_t use_dma;
+ 	uint32_t verid;
++#ifdef CONFIG_ARCH_ROCKCHIP
++	u32 delay_ms;
++#endif
+ 
+ #if defined(CONFIG_DM_GPIO) && (defined(CONFIG_SPL_GPIO_SUPPORT) || !defined(CONFIG_SPL_BUILD))
+ 	struct gpio_desc pwr_en_gpio;
+-	u32 delay_ms;
+ 
+ 	if (mmc_getcd(mmc) == 1 &&
+ 	    !gpio_request_by_name(mmc->dev, "pwr-en-gpios", 0, &pwr_en_gpio, GPIOD_IS_OUT)) {
+@@ -821,6 +823,15 @@ static int dwmci_init(struct mmc *mmc)
+ 		dwmci_writel(host, DWMCI_PWREN, CONFIG_MMC_DW_PWREN_VALUE);
+ 	else
+ 		dwmci_writel(host, DWMCI_PWREN, 1);
++
++	/*
++	 * Some carrier boards switch the card rail through an external load
++	 * switch.  Allow that rail to settle before issuing the first command.
++	 */
++	delay_ms = dev_read_u32_default(mmc->dev,
++					"rockchip,power-on-delay-ms", 0);
++	if (delay_ms)
++		mdelay(delay_ms);
+ #else
+ 	dwmci_writel(host, DWMCI_PWREN, 1);
+ #endif
