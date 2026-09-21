@@ -51,6 +51,14 @@ CM5 底板适配，不包含完整 SDK 和约 1 GB 的 `update.img`。
 
 ## 当前状态
 
+最新整板结果见 [2026-09-21 全功能回归](docs/bringup/CM5_full_regression_20260921.md)：
+当前镜像三摄能并行出帧，但画面偏暗、AIQ 统计异常；双网口、Wi-Fi 和录音仍有待解决问题。
+下表为历史 bring-up 进展，不是当前镜像的全功能验收结论。
+
+2026-09-21：默认改用 USB2 OTG1 Host，PCIe1 改为单独 overlay；
+两种模式通过构建时选择，详见 [构建及切换说明](docs/bringup/CM5_USB2_PCIE1_overlay.md)。
+下表双 PCIe 为此前实测结果，不代表与 OTG1 Hub 同时可用。
+
 | 子系统 | 状态 |
 |---|---|
 | 三路 OV13850 枚举/采集/预览 | 已验证，ISP 仍可继续做 LSC 和分路 AE 标定 |

@@ -87,7 +87,7 @@ SHA-256: 621351159a62df7823f292319d3b4d728347028880ea1b4771ebd0321c625430
 - 按 CM5 底板第二个 M.2 插槽的接线启用 `pcie1`，PHY 使用 `combphy1_psu PHY_TYPE_PCIE`，链路上限设为 Gen2。
 - M.2 `PERST#` 已按实板返修改接到 GPIO4_C7，设备树使用 `GPIO_ACTIVE_HIGH`。Rockchip PCIe 驱动以逻辑 0 拉低 PERST#、逻辑 1 拉高释放，符合低有效的 PCIe 复位信号。
 - R36 保持连接原生 PCIe1 `CLKREQ#`，因此恢复 `pcie1m2_pins`。GPIO4_A5 不再作为 PCIe1 复位信号。
-- USB Host1 的 DWC3 节点删除 `combphy1_psu` USB3 PHY，只保留独立的 `u2phy1_otg`，并设置 `maximum-speed = "high-speed"`。因此该口仍可用 USB2，但不再占用 USB3/PCIe 共用高速 PHY。
+- 更正（2026-09-21）：此前删除 USB3 PHY 引用后推断 USB2 OTG1 可与 PCIe1 并用，未通过实测。用户反馈停用 PCIe1 后 Hub 恢复，因此本板配置按互斥处理：默认 USB2 OTG1 Host，PCIe1 单独 overlay 关闭 OTG1 USB 路径。详见 [模式选择说明](CM5_USB2_PCIE1_overlay.md)。
 
 ## 4. 修改文件
 
@@ -134,7 +134,7 @@ DTB 展开检查确认：
 
 ### 5.4 本次 PCIe1 镜像
 
-- 最终 DTB 已反编译确认：`pcie@2a210000` 为 okay、PHY 指向 `combphy1_psu` 的 PCIe 模式；`usb@23400000` 只剩 USB2 PHY 且限制为 high-speed；返修后的 GPIO4_C7 为 PCIe1 PERST#。
+- 历史 DTB 曾配置 PCIe1 和 USB2 同时启用，但这不代表硬件验证通过；2026-09-21 已改成互斥的基础 DTB / PCIe1 overlay。返修后的 GPIO4_C7 仍为 PCIe1 PERST#。
 - Kernel/DTB/FIT 重新编译成功。
 - `boot.img` SHA-256：`bdf31ce9372abd26ae88933337d2a9c20d798e4dcf79458404a329ae5a9b7b03`。
 - `update.img` SHA-256：`469ff4b1ec9004251367111af9e62a80fe9f1882cd3f51b15a5c0370ceb1e83a`。
@@ -209,7 +209,7 @@ Rockchip MiniLoader，恢复 rkbin 的 `rk3576_spl_v1.08.bin`。该版本发布
 | ES8388 板载麦克风录音 | 差分路径已确认，音量过低，继续调试 |
 | USB-C DP | 已识别 DELL U2518D，4 Lane 5.4 Gbps 链路训练成功；继续排查屏端无画面/刷新问题 |
 | PCIe0/PCIe1 | 两路均已 Gen2 x1 Link Up，并分别枚举 Axera 1f4b:0650 |
-| USB Host1 | 设备树保留 USB2，USB3 让给 PCIe1 |
+| USB2 OTG1 Host | 默认启用；选择 PCIe1 overlay 时关闭，切换需要重启 |
 | TF 卡 SPL 启动 | 已切换 Rockchip MiniLoader 方案，仍需最终冷启动复测 |
 | AIC8800 Wi-Fi | 模块、固件可用；已连接 `Programmers`，当前仍采用手动加载/联网流程 |
 

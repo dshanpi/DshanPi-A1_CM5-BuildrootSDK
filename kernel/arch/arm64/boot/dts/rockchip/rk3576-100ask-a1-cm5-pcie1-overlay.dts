@@ -1,0 +1,40 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+/* Boot-time alternative to the CM5 USB2 OTG1 hub; not a hot-switch overlay. */
+&usb_drd1_dwc3 {
+	status = "disabled";
+};
+
+&u2phy1_otg {
+	status = "disabled";
+};
+
+&u2phy1 {
+	status = "disabled";
+};
+
+&combphy1_psu {
+	status = "okay";
+};
+
+&pinctrl {
+	pcie-cm5 {
+		pcie1_reset_cm5: pcie1-reset-cm5 {
+			rockchip,pins = <4 RK_PC7 RK_FUNC_GPIO &pcfg_pull_down>;
+		};
+	};
+};
+
+&pcie1 {
+	/* Reworked PERST# on GPIO4_C7; R36 remains native CLKREQ#. */
+	max-link-speed = <2>;
+	reset-gpios = <&gpio4 RK_PC7 GPIO_ACTIVE_HIGH>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie1m2_pins &pcie1_reset_cm5>;
+	status = "okay";
+};

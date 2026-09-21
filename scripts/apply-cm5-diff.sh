@@ -48,6 +48,7 @@ install_kernel_file() {
 apply_once "$sdk_root/kernel-6.1" "$repo_root/patches/0001-kernel-cm5-config-and-integration.patch"
 apply_once "$sdk_root/u-boot" "$repo_root/patches/0002-uboot-cm5-sdmmc-power.patch"
 apply_once "$sdk_root/buildroot" "$repo_root/patches/0003-buildroot-cm5-tools.patch"
+apply_once "$sdk_root/kernel-6.1" "$repo_root/patches/0004-cm5-overlay-build.patch"
 
 if [ "$debug_mode" = "--debug" ]; then
 	apply_once "$sdk_root/kernel-6.1" "$repo_root/patches/9001-debug-only-regmap-rk628-v4l2.patch"
@@ -60,6 +61,8 @@ for relative in \
 	arch/arm64/boot/dts/rockchip/rk3576-100ask-dshanpi-a1-linux.dts \
 	arch/arm64/boot/dts/rockchip/rk3576-100ask-dshanpi-a1-common.dtsi \
 	arch/arm64/boot/dts/rockchip/rk3576-100ask-a1-cm5-base-v1.dtsi \
+	arch/arm64/boot/dts/rockchip/rk3576-100ask-a1-cm5-pcie1-overlay.dts \
+	arch/arm64/boot/dts/rockchip/cm5-overlays.mk \
 	arch/arm64/boot/dts/rockchip/rk3576-100ask-1024-768-mipi.dtsi \
 	arch/arm64/boot/dts/rockchip/rk3576-100ask-ov13850-3cam.dtsi; do
 	install_kernel_file "$relative"
@@ -68,6 +71,7 @@ done
 for relative in \
 	external/camera_engine_rkaiq/rkaiq/iqfiles/isp39/ov13850_ZC-OV13850R2A-V1_Largan-50064B31.json \
 	device/rockchip/.chips/rk3576/rockchip_rk3576_dshanpi-a1_defconfig \
+	device/rockchip/common/scripts/build-cm5-mode.sh \
 	device/rockchip/common/post-hooks/89-aic8800-modules.sh; do
 	install_file "$relative"
 done

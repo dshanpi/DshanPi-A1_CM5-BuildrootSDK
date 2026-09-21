@@ -12,7 +12,7 @@ Read the schematics in `docs/hardware/` when a net or polarity is disputed.
 | Headset MOSFET gate | GPIO4_B4 should not float; board uses RK628D_INT_H through 300 kOhm |
 | PCIe0 | PERST# GPIO1_B7; verified Gen2 x1 |
 | PCIe1 | COMBPHY1; reworked PERST# GPIO4_C7; R36 remains native CLKREQ#; verified Gen2 x1 |
-| USB Host1 | USB2 remains available; USB3 shares COMBPHY1 with PCIe1 |
+| USB2 OTG1 / PCIe1 | Mutually exclusive on this CM5 configuration: USB2 Host by default; PCIe1 boot overlay disables OTG1 controller and U2PHY1. Do not infer coexistence from separate D+/D- pins. |
 | TF power | U29 MT9700, active-high EN GPIO0_B6 (`SDMMC0_PWREN_H`) |
 | OV13850 CAM0 | I2C2, CSI DCPHY0, PWDN GPIO3_C5, ISP vir0 |
 | OV13850 CAM1 | I2C3, CSI DPHY1, PWDN GPIO3_C7, ISP vir1 |
