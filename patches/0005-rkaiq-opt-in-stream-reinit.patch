@@ -1,0 +1,30 @@
+diff --git a/rkaiq_3A_server/rkaiq_3A_server.cpp b/rkaiq_3A_server/rkaiq_3A_server.cpp
+index bf1ce99..cb3639c 100644
+--- a/rkaiq_3A_server/rkaiq_3A_server.cpp
++++ b/rkaiq_3A_server/rkaiq_3A_server.cpp
+@@ -144,6 +144,10 @@ static void init_engine(struct rkaiq_media_info *media_info)
+ 
+     media_info->aiq_ctx = rk_aiq_uapi2_sysctl_init(media_info->sensor_entity_name,
+                                                   IQ_PATH, NULL, NULL);
++    if (!media_info->aiq_ctx) {
++        ERR("rkaiq engine init failed!\n");
++        exit(EXIT_FAILURE);
++    }
+     /* 3A server has listened stream events already */
+     rk_aiq_uapi2_sysctl_setListenStrmStatus(media_info->aiq_ctx, false);
+     if (has_mul_cam)
+@@ -300,6 +304,14 @@ void *engine_thread(void *arg)
+         DBG("%s: wait stream stop event success ...\n", media_info->mdev_path);
+ 
+         stop_engine(media_info);
++        /* Opt-in CM5 stream-cycle recovery; keep other boards unchanged. */
++        const char *reinit = getenv("RKAIQ_REINIT_ON_STOP");
++        if (reinit && !strcmp(reinit, "1")) {
++            deinit_engine(media_info);
++            media_info->aiq_ctx = NULL;
++            init_engine(media_info);
++            DBG("%s: rebuilt AIQ context after stream stop\n", media_info->mdev_path);
++        }
+     }
+ 
+     subscrible_stream_event(media_info, isp_fd, false);

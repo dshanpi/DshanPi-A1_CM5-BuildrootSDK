@@ -49,6 +49,7 @@ apply_once "$sdk_root/kernel-6.1" "$repo_root/patches/0001-kernel-cm5-config-and
 apply_once "$sdk_root/u-boot" "$repo_root/patches/0002-uboot-cm5-sdmmc-power.patch"
 apply_once "$sdk_root/buildroot" "$repo_root/patches/0003-buildroot-cm5-tools.patch"
 apply_once "$sdk_root/kernel-6.1" "$repo_root/patches/0004-cm5-overlay-build.patch"
+apply_once "$sdk_root/external/camera_engine_rkaiq" "$repo_root/patches/0005-rkaiq-opt-in-stream-reinit.patch"
 
 if [ "$debug_mode" = "--debug" ]; then
 	apply_once "$sdk_root/kernel-6.1" "$repo_root/patches/9001-debug-only-regmap-rk628-v4l2.patch"

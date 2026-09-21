@@ -198,7 +198,7 @@
               "commCtrl": {
                 "sw_aeT_algo_en": 1,
                 "sw_aeT_algo_interval": 0,
-                "sw_aeT_opt_mode": "RK_AIQ_OP_MODE_MANUAL",
+                "sw_aeT_opt_mode": "RK_AIQ_OP_MODE_AUTO",
                 "sw_aeT_histStats_mode": "ae_histStats_y_mode",
                 "sw_aeT_rawStats_mode": "ae_rawStats_y_mode",
                 "sw_aeT_yRange_mode": "ae_yRange_full_mode",
