@@ -85,8 +85,8 @@ SHA-256: 621351159a62df7823f292319d3b4d728347028880ea1b4771ebd0321c625430
 
 - RK3576 的 PCIe1 与 USB3 Host1 共用 `COMBPHY1`，不能同时工作在两种模式。
 - 按 CM5 底板第二个 M.2 插槽的接线启用 `pcie1`，PHY 使用 `combphy1_psu PHY_TYPE_PCIE`，链路上限设为 Gen2。
-- M.2 `PERST#` 由 `RK628D_RESET_H`（GPIO4_A5）控制，设备树使用 `GPIO_ACTIVE_HIGH`。Rockchip PCIe 驱动以逻辑 0 拉低 PERST#、逻辑 1 拉高释放，正好符合低有效的 PCIe 复位信号。
-- GPIO4_A5 同时也是 RK3576 的 `pcie1_clkreq_m2` 复用脚，无法既做 PERST# 又做 CLKREQ#。当前优先保证必需的 PERST#，不选择 `pcie1m2_pins`；驱动会进入不支持 CLKREQ 的模式并禁用 L1SS，基本枚举和链路训练不依赖 CLKREQ#。
+- M.2 `PERST#` 已按实板返修改接到 GPIO4_C7，设备树使用 `GPIO_ACTIVE_HIGH`。Rockchip PCIe 驱动以逻辑 0 拉低 PERST#、逻辑 1 拉高释放，符合低有效的 PCIe 复位信号。
+- R36 保持连接原生 PCIe1 `CLKREQ#`，因此恢复 `pcie1m2_pins`。GPIO4_A5 不再作为 PCIe1 复位信号。
 - USB Host1 的 DWC3 节点删除 `combphy1_psu` USB3 PHY，只保留独立的 `u2phy1_otg`，并设置 `maximum-speed = "high-speed"`。因此该口仍可用 USB2，但不再占用 USB3/PCIe 共用高速 PHY。
 
 ## 4. 修改文件
@@ -134,7 +134,7 @@ DTB 展开检查确认：
 
 ### 5.4 本次 PCIe1 镜像
 
-- 最终 DTB 已反编译确认：`pcie@2a210000` 为 okay、PHY 指向 `combphy1_psu` 的 PCIe 模式；`usb@23400000` 只剩 USB2 PHY 且限制为 high-speed；GPIO4_A5 为 PCIe1 PERST#。
+- 最终 DTB 已反编译确认：`pcie@2a210000` 为 okay、PHY 指向 `combphy1_psu` 的 PCIe 模式；`usb@23400000` 只剩 USB2 PHY 且限制为 high-speed；返修后的 GPIO4_C7 为 PCIe1 PERST#。
 - Kernel/DTB/FIT 重新编译成功。
 - `boot.img` SHA-256：`bdf31ce9372abd26ae88933337d2a9c20d798e4dcf79458404a329ae5a9b7b03`。
 - `update.img` SHA-256：`469ff4b1ec9004251367111af9e62a80fe9f1882cd3f51b15a5c0370ceb1e83a`。
@@ -207,8 +207,8 @@ Rockchip MiniLoader，恢复 rkbin 的 `rk3576_spl_v1.08.bin`。该版本发布
 | GT911 触摸（I2C9） | 已通过 |
 | ES8388 耳机与双喇叭播放 | 已通过 |
 | ES8388 板载麦克风录音 | 差分路径已确认，音量过低，继续调试 |
-| USB-C DP | 显示器有反应但尚未稳定出图 |
-| PCIe1（COMBPHY1） | 设备树已切换；等待 R30/R31 焊接完成后枚举测试 |
+| USB-C DP | 已识别 DELL U2518D，4 Lane 5.4 Gbps 链路训练成功；继续排查屏端无画面/刷新问题 |
+| PCIe0/PCIe1 | 两路均已 Gen2 x1 Link Up，并分别枚举 Axera 1f4b:0650 |
 | USB Host1 | 设备树保留 USB2，USB3 让给 PCIe1 |
 | TF 卡 SPL 启动 | 已切换 Rockchip MiniLoader 方案，仍需最终冷启动复测 |
 | AIC8800 Wi-Fi | 模块、固件可用；已连接 `Programmers`，当前仍采用手动加载/联网流程 |

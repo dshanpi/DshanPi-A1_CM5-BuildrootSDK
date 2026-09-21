@@ -9,8 +9,9 @@ CM5 底板适配，不包含完整 SDK 和约 1 GB 的 `update.img`。
 - 1024×768 MIPI DSI 屏与 I2C9 GT911 触摸；
 - USB-C DisplayPort SBU GPIO 修正；
 - ES8388 路由、耳机检测和 `SAI2_SDO` 引脚冲突修复；
-- PCIe1/USB3 Host1 共用 COMBPHY1 的模式切换；
-- TF 卡 SPL/SDMMC0 供电实验及 Rockchip MiniLoader 构建选择；
+- PCIe0/PCIe1 双控制器配置，以及 PCIe1/USB3 Host1 共用 COMBPHY1 的模式切换；
+- TF 卡 SPL/SDMMC0 供电修复及 Rockchip MiniLoader 构建选择；
+- DDR/SPL、U-Boot 和 Linux 调试串口统一为 1,500,000 baud；
 - AIC8800 Wi-Fi/蓝牙驱动、固件和 Buildroot 集成；
 - 原理图、位号图、开发记录以及可复用的 Codex bring-up skill。
 
@@ -56,8 +57,8 @@ CM5 底板适配，不包含完整 SDK 和约 1 GB 的 `update.img`。
 | MIPI DSI 显示、GT911 触摸 | 已验证 |
 | ES8388 耳机、双喇叭播放 | 已验证 |
 | ES8388 板载麦克风 | 差分路径已确认，录音电平仍低，继续调试 |
-| USB-C DP | 显示器有响应，尚未稳定出图 |
-| PCIe1 | DTS 已切换，等待 R30/R31 焊接后枚举验证 |
+| USB-C DP | 已识别显示器并完成 4 Lane HBR2 链路训练；当前继续排查屏端无画面/刷新问题 |
+| PCIe0/PCIe1 | 两路均已以 Gen2 x1 Link Up，并各枚举一张 Axera 1f4b:0650 |
 | TF 卡启动 | 已切换 vendor MiniLoader，仍需最终冷启动复测 |
 | AIC8800 Wi-Fi | 模块和固件已验证；联网服务尚未固化 |
 

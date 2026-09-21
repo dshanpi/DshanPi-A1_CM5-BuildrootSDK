@@ -33,4 +33,7 @@
 - GT911 位于 I2C9，IRQ=GPIO3_D0，RESET=GPIO0_C1。
 - 板载 MIC2 接 LIN2/RIN2，软件应使用 Differential + Line2。
 - PCIe1 与 USB3 Host1 共用 COMBPHY1；当前选择 PCIe1，Host1 只保留 USB2。
+- PCIe1 PERST# 使用实板飞线后的 GPIO4_C7；R36 保持原生 CLKREQ#，并启用
+  `pcie1m2_pins`。PCIe0 保持 GPIO1_B7 PERST#。
 - SDMMC0 电源开关 U29 的 EN 为高有效 GPIO0_B6。
+- DDR/SPL、U-Boot proper 与 Linux FIQ debugger 均使用 1,500,000 baud。

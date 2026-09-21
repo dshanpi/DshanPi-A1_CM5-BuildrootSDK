@@ -10,7 +10,8 @@ Read the schematics in `docs/hardware/` when a net or polarity is disputed.
 | ES8388 capture | MIC1P/N headset on LIN1/RIN1; MIC2P/N board mic on LIN2/RIN2 |
 | Headset detect | GPIO4_B5, observed high while inserted |
 | Headset MOSFET gate | GPIO4_B4 should not float; board uses RK628D_INT_H through 300 kOhm |
-| PCIe1 | COMBPHY1; PERST# GPIO4_A5; CLKREQ mux conflicts with the same GPIO |
+| PCIe0 | PERST# GPIO1_B7; verified Gen2 x1 |
+| PCIe1 | COMBPHY1; reworked PERST# GPIO4_C7; R36 remains native CLKREQ#; verified Gen2 x1 |
 | USB Host1 | USB2 remains available; USB3 shares COMBPHY1 with PCIe1 |
 | TF power | U29 MT9700, active-high EN GPIO0_B6 (`SDMMC0_PWREN_H`) |
 | OV13850 CAM0 | I2C2, CSI DCPHY0, PWDN GPIO3_C5, ISP vir0 |
