@@ -1,0 +1,96 @@
+#!/bin/sh
+# BusyBox init: start after Weston/PulseAudio, with bounded readiness waiting.
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+PROGRAM=${CM5_PROGRAM:-/usr/bin/cm5-factory-test}
+PIDFILE=${CM5_PIDFILE:-/var/run/cm5-factory-test.pid}
+CONFIG=${CM5_CONFIG:-/etc/cm5-factory-test.conf}
+LOGFILE=${CM5_LOGFILE:-/var/log/cm5-factory-test.log}
+export XDG_RUNTIME_DIR=${CM5_RUNTIME_DIR:-${XDG_RUNTIME_DIR:-/var/run}}
+export WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-0}
+
+is_running()
+{
+    [ -s "$PIDFILE" ] && start-stop-daemon -K -t -p "$PIDFILE" -x "$PROGRAM" >/dev/null 2>&1
+}
+
+start()
+{
+    if is_running; then
+        echo "CM5 factory test is already running"
+        return 0
+    fi
+    [ -x "$PROGRAM" ] || { echo "Missing program: $PROGRAM" >&2; return 1; }
+    [ -r "$CONFIG" ] || { echo "Missing config: $CONFIG" >&2; return 1; }
+    lockdir=$PIDFILE.start-lock
+    if ! mkdir "$lockdir" 2>/dev/null; then
+        echo "CM5 factory test start is already in progress" >&2
+        return 1
+    fi
+    trap 'rmdir "$lockdir" 2>/dev/null || true' EXIT
+    case "$WAYLAND_DISPLAY" in
+        /*) socket=$WAYLAND_DISPLAY ;;
+        *) socket=$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ;;
+    esac
+    remaining=${CM5_WAIT_SECONDS:-30}
+    case "$remaining" in ''|*[!0-9]*) echo "Invalid wait timeout" >&2; return 1 ;; esac
+    while [ ! -S "$socket" ]; do
+        if [ "$remaining" -eq 0 ]; then
+            echo "CM5 factory test: Weston socket unavailable: $socket" >&2
+            return 1
+        fi
+        sleep 1
+        remaining=$((remaining - 1))
+    done
+    reportdir=${CM5_REPORT_DIR:-/userdata/cm5-factory-reports}
+    if ! mkdir -p "$reportdir" 2>/dev/null || [ ! -w "$reportdir" ]; then
+        reportdir=/tmp/cm5-factory-reports
+        mkdir -p "$reportdir" || return 1
+        echo "CM5 factory test: using temporary report directory $reportdir" >&2
+    fi
+    boot_id=$(cat /proc/sys/kernel/random/boot_id 2>/dev/null)
+    [ -n "$boot_id" ] || boot_id=$$
+    report=$reportdir/cm5-$(date -u +%Y%m%dT%H%M%SZ)-$boot_id-$$.json
+    mkdir -p "$(dirname "$LOGFILE")" || return 1
+    echo "Starting CM5 factory test; report: $report"
+    # Background the foreground SSD process so its stdout/stderr stay in the log.
+    # SSD writes its own PID before exec; that PID remains the application's PID.
+    start-stop-daemon -S -m -p "$PIDFILE" -x "$PROGRAM" -- \
+        --config "$CONFIG" --report "$report" >>"$LOGFILE" 2>&1 &
+    tries=0
+    while ! is_running; do
+        tries=$((tries + 1))
+        if [ "$tries" -ge 20 ]; then
+            echo "CM5 factory test failed to start; see $LOGFILE" >&2
+            return 1
+        fi
+        sleep .1
+    done
+}
+
+stop()
+{
+    if ! is_running; then
+        rm -f "$PIDFILE"
+        return 0
+    fi
+    start-stop-daemon -K -o -p "$PIDFILE" -x "$PROGRAM" -s TERM || return 1
+    tries=0
+    while is_running; do
+        tries=$((tries + 1))
+        if [ "$tries" -ge 100 ]; then
+            echo "CM5 factory test has not stopped; PID file retained" >&2
+            return 1
+        fi
+        sleep .1
+    done
+    rm -f "$PIDFILE"
+}
+
+case "$1" in
+    start) start ;;
+    stop) stop ;;
+    restart|reload) stop && start ;;
+    status) if is_running; then echo "CM5 factory test is running"; else echo "CM5 factory test is stopped"; exit 1; fi ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" >&2; exit 1 ;;
+esac

@@ -96,5 +96,14 @@ chmod 0755 "$sdk_root/device/rockchip/common/post-hooks/89-aic8800-modules.sh"
 ln -sfn rockchip_rk3576_dshanpi-a1_defconfig \
 	"$sdk_root/device/rockchip/.chips/rk3576/rockchip_defconfig"
 
+rsync -a --exclude='build/' --exclude='__pycache__/' \
+    "$repo_root/app/cm5_factory_test/" "$sdk_root/app/cm5_factory_test/"
+chmod 0755 "$sdk_root/app/cm5_factory_test/install-sdk.sh" \
+    "$sdk_root/app/cm5_factory_test/build-board-support.sh" \
+    "$sdk_root/app/cm5_factory_test/cm5-factory-launch" \
+    "$sdk_root/app/cm5_factory_test/S19cm5-phy" \
+    "$sdk_root/app/cm5_factory_test/S98cm5-factory-test" \
+    "$sdk_root/app/cm5_factory_test/tests/verify.sh"
+
 printf 'CM5 differential package applied to %s\n' "$sdk_root"
 printf 'Build order: ./build.sh uboot && ./build.sh kernel && ./build.sh buildroot && ./build.sh updateimg\n'

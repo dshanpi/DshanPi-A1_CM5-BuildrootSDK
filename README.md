@@ -1,5 +1,10 @@
 # DshanPi A1 CM5 Buildroot SDK 差分包
 
+`cm5-factory-test` 分支加入 14 项开机自动产测、YT8521 PHY 驱动和 TF 软件轮询配置。
+集成与构建步骤见 [CM5 产测集成](docs/CM5_FACTORY_TEST.md)，应用说明见
+[产测工具](app/cm5_factory_test/README.md)。2026-11-12 已完成实板整包烧录、重启自启
+及 TF 自动读取验证，PCIe1 测试项暂时隐藏。下文保留此前 bring-up 记录。
+
 本仓库保存相对于 Rockchip RK3576 Linux 6.1 Buildroot SDK 的 DshanPi A1
 CM5 底板适配，不包含完整 SDK 和约 1 GB 的 `update.img`。
 

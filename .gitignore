@@ -19,3 +19,7 @@ tmp/
 .DS_Store
 *.swp
 *~
+
+# Factory test build products
+/app/cm5_factory_test/build/
+**/__pycache__/

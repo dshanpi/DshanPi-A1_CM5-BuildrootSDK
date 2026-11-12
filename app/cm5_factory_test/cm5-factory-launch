@@ -1,0 +1,17 @@
+#!/bin/sh
+# Prefer the Weston session environment. Fallback matches this SDK.
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    export XDG_RUNTIME_DIR=/var/run
+fi
+if [ -z "$WAYLAND_DISPLAY" ]; then
+    export WAYLAND_DISPLAY=wayland-0
+fi
+case "$WAYLAND_DISPLAY" in
+    /*) socket=$WAYLAND_DISPLAY ;;
+    *) socket=$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ;;
+esac
+if [ ! -S "$socket" ]; then
+    echo "Weston socket unavailable: $socket" >&2
+    exit 1
+fi
+exec /usr/bin/cm5-factory-test "$@"

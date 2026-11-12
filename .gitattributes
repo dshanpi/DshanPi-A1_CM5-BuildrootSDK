@@ -1,2 +1,6 @@
 *.pdf binary
 patches/*.patch whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab
+
+app/cm5_factory_test/** text eol=lf
+app/cm5_factory_test/assets/*.png binary
+scripts/apply-cm5-diff.sh text eol=lf

@@ -130,3 +130,17 @@
 	};
 
 };
+
+
+/* Preserve the verified U29 TF supply mapping used by the running board. */
+&vcc_sdcard_pwr {
+    /delete-property/ regulator-always-on;
+    startup-delay-us = <20000>;
+    off-on-delay-us = <10000>;
+};
+&sdmmc {
+    vmmc-supply = <&vcc_sdcard_pwr>;
+    /* The carrier uses software polling for this removable slot. */
+    pinctrl-0 = <&sdmmc0_clk &sdmmc0_cmd &sdmmc0_bus4>;
+    broken-cd;
+};
