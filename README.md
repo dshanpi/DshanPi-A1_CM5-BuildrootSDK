@@ -58,4 +58,16 @@ ls -lhL output/firmware/update.img
 ~/cm5-board/scripts/restore-cm5-diff.sh ~/100ask-rk3576_SDK
 ```
 
+## 恢复整套 SDK 到发布基线
+
+需要重新开始开发时，将发布资料中的 `100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz` 和 [SHA-256 校验文件](docs/baselines/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz.sha256) 放在同一目录。基线包约 8.33 GiB，解压约需 15 GiB，已包含本版 DshanPI A1 CM5 板级配置、交叉工具链和 Buildroot 下载缓存。
+
+在 Ubuntu 上运行以下命令。示例假设下载文件放在 `~/Downloads/`，恢复目标 `~/cm5-sdk-restored` 尚不存在。
+
+```bash
+~/cm5-board/scripts/restore-sdk-baseline.sh ~/Downloads/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz ~/cm5-sdk-restored
+```
+
+脚本会先核对 SHA-256，再解压到新目录，原工作目录中的修改会保留。进入 `~/cm5-sdk-restored` 后，按上文“编译固件”选择配置并编译。
+
 差分文件按 SDK 路径存放在仓库根目录。各目录的用途见[差分清单](docs/CM5_DIFF_MANIFEST.md)。
