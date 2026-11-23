@@ -1,2 +1,4 @@
 * text=auto eol=lf
-/overlay/** -text
+/app/** -text
+/device/** -text
+/kernel-6.1/** -text

@@ -51,7 +51,7 @@ def run(action, sdk):
         if action == "apply":
             manifest = json.loads((repo / "manifest.json").read_text())
             for name, meta in manifest.items():
-                if digest(target(repo / "overlay", name)) != meta["sha256"]:
+                if digest(target(repo, name)) != meta["sha256"]:
                     raise ValueError(f"配置文件校验失败: {name}")
                 dest = target(sdk, name)
                 if name not in saved:
@@ -65,7 +65,7 @@ def run(action, sdk):
                 json.dump(saved, tmp)
             os.replace(tmp.name, index)
             for name, meta in manifest.items():
-                replace(repo / "overlay" / name, target(sdk, name), int(meta["mode"], 8))
+                replace(repo / name, target(sdk, name), int(meta["mode"], 8))
             print(f"已应用 {len(manifest)} 个板级文件。")
         else:
             if not index.exists():
