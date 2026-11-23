@@ -1,0 +1,9 @@
+#!/bin/sh
+# Audio state must remain usable when the persistent data partition is damaged.
+export PULSE_HOME=/var/run/cm5-pulse
+if command -v pasuspender >/dev/null 2>&1 &&
+   timeout 2 pactl info >/dev/null 2>&1; then
+    exec pasuspender -- "$@"
+fi
+echo "PulseAudio unavailable; using the selected ALSA device directly." >&2
+exec "$@"

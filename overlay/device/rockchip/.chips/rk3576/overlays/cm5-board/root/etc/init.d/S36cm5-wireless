@@ -1,0 +1,21 @@
+#!/bin/sh
+# The AIC8800D80 exposes Wi-Fi on SDIO and Bluetooth on UART7.
+load_module() {
+    [ -d "/sys/module/$1" ] || insmod "/lib/modules/$1.ko"
+}
+start() {
+    load_module aic8800_bsp && load_module aic8800_fdrv || return 1
+    ip link set wlan0 up || return 1
+    load_module aic8800_btlpm || return 1
+    for radio in /sys/class/rfkill/rfkill*; do
+        [ -r "$radio/type" ] || continue
+        [ "$(cat "$radio/type")" = bluetooth ] || continue
+        echo 1 > "$radio/state" || return 1
+    done
+    [ -e /sys/class/bluetooth/hci0 ] || hciattach /dev/ttyS7 any 1500000 flow
+}
+case "$1" in
+    start) start ;;
+    stop) : ;;
+    *) echo "Usage: $0 start|stop" >&2; exit 1 ;;
+esac

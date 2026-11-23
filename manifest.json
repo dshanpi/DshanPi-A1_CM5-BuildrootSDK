@@ -1,0 +1,182 @@
+{
+  "app/cm5_factory_test/Makefile": {
+    "mode": "0644",
+    "sha256": "32a5b33a838b24195dfaf5ae0062ad4ae377a48d2f77358bc849c030600afcff"
+  },
+  "app/cm5_factory_test/S19cm5-phy": {
+    "mode": "0755",
+    "sha256": "ac40a1c96a74cda2471fde7f26a3022351d0d6ccb55189b2a2368de227167fc8"
+  },
+  "app/cm5_factory_test/S50pulseaudio": {
+    "mode": "0755",
+    "sha256": "373efa55af437ebafcaea5ad2e4220c6eb050677ffd82df0ceb9f266455db360"
+  },
+  "app/cm5_factory_test/S98cm5-factory-test": {
+    "mode": "0755",
+    "sha256": "f923663b4e55483de38cc804dd928351ce557d06f947abe7db8c50acacdafaae"
+  },
+  "app/cm5_factory_test/assets/a1-factory-test.png": {
+    "mode": "0644",
+    "sha256": "371c4ff30c95656608e1c46adcd43a26f8694f4f536c84a5cd372565e9423ee2"
+  },
+  "app/cm5_factory_test/board-support/Makefile": {
+    "mode": "0644",
+    "sha256": "65cfe370b8f2b7b420ef83d892b9268306b5ea639783b587fed107bb5270c7ae"
+  },
+  "app/cm5_factory_test/board-support/cm5_yt8521.c": {
+    "mode": "0644",
+    "sha256": "b857b1064271d210b3000c10426271337074c3ca8b5afb5fd5efb9f635867284"
+  },
+  "app/cm5_factory_test/build-board-support.sh": {
+    "mode": "0644",
+    "sha256": "92cec1b54173662fe11117167fc6c6460cfdd262bab6ab154a173e0338ab3b85"
+  },
+  "app/cm5_factory_test/cm5-audio-run": {
+    "mode": "0755",
+    "sha256": "06b996be0aa54a91ec5ceaa56559bbb631ba355061a1304ac366d8b66650965b"
+  },
+  "app/cm5_factory_test/cm5-factory-launch": {
+    "mode": "0755",
+    "sha256": "b3adfe5d9959fc8b6d69c7505a5889f338dac8a09ee88885ded540db05f0c1ef"
+  },
+  "app/cm5_factory_test/cm5-factory-test.conf": {
+    "mode": "0644",
+    "sha256": "e5cef2e8f94faab4ef6d3b3bdc17724a3eff0032839390d24dfd29b4166ddd95"
+  },
+  "app/cm5_factory_test/cm5-factory-test.desktop": {
+    "mode": "0644",
+    "sha256": "ff0afd9715eda863712b78849a5f123e82017911f8a0f1d263464e77cd9ecf5e"
+  },
+  "app/cm5_factory_test/cm5-ov13850-preview": {
+    "mode": "0755",
+    "sha256": "80bf9cd1711e0bb66dd7b90a09a9cd1443b91ebd95d8e99b96b96a399c9ba663"
+  },
+  "app/cm5_factory_test/src/auto.inc": {
+    "mode": "0644",
+    "sha256": "ac73b8f2b1902b19739e88357cbdc03dfe399b0d5de8ba3806d57de1d47ebc19"
+  },
+  "app/cm5_factory_test/src/checks.c": {
+    "mode": "0644",
+    "sha256": "eb867c3ec816a2bdf3cf60ac154810f6e3258c8d2b81c421eb11e0044df7d6d7"
+  },
+  "app/cm5_factory_test/src/checks.h": {
+    "mode": "0644",
+    "sha256": "3febe2fc6ecb39e2dffadb0318b0cf4da14a6fee1e48503fcb2f2fe592a79a82"
+  },
+  "app/cm5_factory_test/src/factory.c": {
+    "mode": "0644",
+    "sha256": "03cae6f85de0cb6b6aea1a88df8ddfd0885c4e671f4ee567a19c8c96c68308f3"
+  },
+  "app/cm5_factory_test/src/factory.h": {
+    "mode": "0644",
+    "sha256": "66d2719dfc089b0e10e068b8813350eaa5754326c27fdcd9ea6829f0434e9d2c"
+  },
+  "app/cm5_factory_test/src/hardware.c": {
+    "mode": "0644",
+    "sha256": "8b3f040cb2ba51caef4224e4f6673072f308f867e26093b319dfec0f7c4c5884"
+  },
+  "app/cm5_factory_test/src/hardware.h": {
+    "mode": "0644",
+    "sha256": "3be3f405db4a17fe9efb112f12cf00c8c2ff444fe05121a559922ffc2044d272"
+  },
+  "app/cm5_factory_test/src/main.c": {
+    "mode": "0644",
+    "sha256": "d4d378cc711efc0a42c9c4083446fb55f47ea90a92a9e31184568cb1d4535ae0"
+  },
+  "app/cm5_factory_test/src/nvme_probe.c": {
+    "mode": "0644",
+    "sha256": "6cd7f2c2ebfa1fb627ce46259b811812438ebcdf65ebd6d5869d97973c40865b"
+  },
+  "app/cm5_factory_test/src/nvme_probe.h": {
+    "mode": "0644",
+    "sha256": "cb6fd82398a51c5b0143090922a6fb28816229b6ff4c2b3f2318d5a9ed35cd59"
+  },
+  "app/cm5_factory_test/src/ui.inc": {
+    "mode": "0644",
+    "sha256": "3b92bfd42cf021a26f7f20f1582181f6158a59f978795fe35a97668edac84995"
+  },
+  "app/cm5_factory_test/src/usb.inc": {
+    "mode": "0644",
+    "sha256": "ef9e3d2eff8cdc73ae251f7f873809ee1e5aa6b0e19e660506811967aea8df8a"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/install.sh": {
+    "mode": "0755",
+    "sha256": "a0e0825a3ffcfe862c95f4b30dc8c1d6fbd54b107cea005fe91ef0dc8f1d4845"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/root/etc/init.d/S19cm5-phy": {
+    "mode": "0755",
+    "sha256": "ac40a1c96a74cda2471fde7f26a3022351d0d6ccb55189b2a2368de227167fc8"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/root/etc/init.d/S36cm5-wireless": {
+    "mode": "0755",
+    "sha256": "84b5c9a3f7c12fd5c3fbc81992855b17606f8eae91177d846c2aa3f99541606a"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/root/etc/init.d/S40rkaiq_3A": {
+    "mode": "0755",
+    "sha256": "1477ff0c3d96ab49bd199681cd0ac8652484e8f91392c80690af32dd644862a7"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/root/etc/iqfiles/ov13850_ZC-OV13850R2A-V1_Largan-50064B31.json": {
+    "mode": "0644",
+    "sha256": "01ae49666c6e55aca4f412f2ae9fe96158a610e60c401bfafd4f373471cb4856"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/root/usr/bin/rkaiq_3A_server": {
+    "mode": "0755",
+    "sha256": "da1923cf332b4a8a27cd3174123ebdb25fdcdd40d5c15c51be995a856142efee"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-board/root/usr/lib/modules/6.1.75/extra/cm5_yt8521.ko": {
+    "mode": "0644",
+    "sha256": "e95554a1d57b3e766f9ac8f443bf5729a9d49ed52f76d354fd627b534d250ae5"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/etc/cm5-factory-test.conf": {
+    "mode": "0644",
+    "sha256": "e5cef2e8f94faab4ef6d3b3bdc17724a3eff0032839390d24dfd29b4166ddd95"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/etc/init.d/S50pulseaudio": {
+    "mode": "0755",
+    "sha256": "373efa55af437ebafcaea5ad2e4220c6eb050677ffd82df0ceb9f266455db360"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/etc/init.d/S98cm5-factory-test": {
+    "mode": "0755",
+    "sha256": "f923663b4e55483de38cc804dd928351ce557d06f947abe7db8c50acacdafaae"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/bin/cm5-audio-run": {
+    "mode": "0755",
+    "sha256": "06b996be0aa54a91ec5ceaa56559bbb631ba355061a1304ac366d8b66650965b"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/bin/cm5-factory-launch": {
+    "mode": "0755",
+    "sha256": "b3adfe5d9959fc8b6d69c7505a5889f338dac8a09ee88885ded540db05f0c1ef"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/bin/cm5-factory-test": {
+    "mode": "0755",
+    "sha256": "0703c66831e856e922873901d28a52eb9f21f6deae5b2e3987f20143057bdffc"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/bin/cm5-ov13850-preview": {
+    "mode": "0755",
+    "sha256": "80bf9cd1711e0bb66dd7b90a09a9cd1443b91ebd95d8e99b96b96a399c9ba663"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/share/applications/cm5-factory-test.desktop": {
+    "mode": "0644",
+    "sha256": "ff0afd9715eda863712b78849a5f123e82017911f8a0f1d263464e77cd9ecf5e"
+  },
+  "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/share/icons/hicolor/256x256/apps/cm5-factory-test.png": {
+    "mode": "0644",
+    "sha256": "371c4ff30c95656608e1c46adcd43a26f8694f4f536c84a5cd372565e9423ee2"
+  },
+  "device/rockchip/.chips/rk3576/rockchip_rk3576_dshanpi-a1_cm5_defconfig": {
+    "mode": "0644",
+    "sha256": "23fe65d257cf1d2d2da2a6b91d0dd0f1c1fdcc68ad1307b377e044faa01d85ab"
+  },
+  "kernel-6.1/arch/arm64/boot/dts/rockchip/rk3576-100ask-a1-cm5-base-v1.dtsi": {
+    "mode": "0644",
+    "sha256": "5fe7793bab8d110365d7819277c9ab7a02b189aac00df6770659335cf13356ac"
+  },
+  "kernel-6.1/arch/arm64/boot/dts/rockchip/rk3576-100ask-dshanpi-a1-cm5-linux.dts": {
+    "mode": "0644",
+    "sha256": "7866d42e392917b51cc2a1c706ecc0ee07adab3ffff584232f4cd8dc72f0e21b"
+  },
+  "kernel-6.1/arch/arm64/boot/dts/rockchip/rk3576-100ask-ov13850-3cam.dtsi": {
+    "mode": "0644",
+    "sha256": "78c2f41696dd6dca576d22d9842d6fd60fac2b5c928f2b426cd468007d886492"
+  }
+}

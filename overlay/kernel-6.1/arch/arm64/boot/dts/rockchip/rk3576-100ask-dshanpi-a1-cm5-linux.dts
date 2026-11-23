@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+#include "rk3576-100ask-dshanpi-a1-linux.dts"
+#include "rk3576-100ask-ov13850-3cam.dtsi"
+#include "rk3576-100ask-a1-cm5-base-v1.dtsi"
+
+/* The HUSB311 controls VBUS on the CM5 carrier's dual-role Type-C port. */
+&vbus_usb_fixed {
+	/delete-property/ regulator-always-on;
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb_otg0_pwren>;
+};
+&usbc0 { vbus-supply = <&vbus_usb_fixed>; };
+&usb_otg0_pwren { rockchip,pins = <1 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>; };
+&usbc0_int { rockchip,pins = <1 RK_PC0 RK_FUNC_GPIO &pcfg_pull_up>; };
