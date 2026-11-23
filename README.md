@@ -21,6 +21,8 @@ git clone --single-branch --branch cm5-board-20261123 https://github.com/dshanpi
 
 ## 3. 编译固件
 
+使用配套的 Ubuntu 编译环境。U-Boot 的构建脚本需要主机上有 `python2`，可先运行 `python2 --version` 确认。
+
 进入 SDK，选择 DshanPI A1 CM5 配置。
 
 ```bash
