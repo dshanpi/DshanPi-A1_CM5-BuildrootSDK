@@ -167,7 +167,7 @@ static const struct test_item definitions[TEST_COUNT] = {
     [T_WIFI] = {.key = "onboard_wifi",
                 .name = "板载 Wi-Fi",
                 .page = 1,
-                .instruction = "装好天线并连接无线网络。板载 AIC8800D80 无线链路就绪后通过。",
+                .instruction = "装好天线，板载 Wi-Fi 扫描到至少一个热点即通过。",
                 .require_detection = 1},
     [T_USB1] = {.key = "usb_a1",
                 .name = "USB-A 上口",
@@ -562,13 +562,15 @@ void factory_scan(struct factory *f) {
   scan_devices(f);
   rooted_read(f, "/sys/class/net/wlan0/device/modalias", a, sizeof(a));
   int onboard = !strcmp(a, "sdio:c07vC8A1d0082");
-  rooted_read(f, "/sys/class/net/wlan0/carrier", b, sizeof(b));
-  int wifi_link = onboard && !strcmp(b, "1");
-  reset_item(&f->tests[T_WIFI], wifi_link,
-             wifi_link ? "板载 SDIO 无线接口 wlan0 链路已就绪。" :
-             onboard ? "已识别板载无线网卡，等待连接热点。" :
-                       "未发现板载 AIC8800D80 无线接口。");
-  const int live[] = {T_ETH0, T_ETH1, T_USB1, T_USB2, T_TYPEC, T_HDMI, T_WIFI};
+  struct test_item *wifi = &f->tests[T_WIFI];
+  if (!onboard || !wifi->detected || !f->wifi_retry_at)
+    reset_item(wifi, onboard, onboard ? "已识别板载网卡，等待扫描热点。" :
+                                       "未发现板载 AIC8800D80 无线接口。");
+  if (f->monitoring && !f->auto_running && onboard &&
+      (wifi->state == READY || wifi->state == UNKNOWN) &&
+      seconds() >= f->wifi_retry_at)
+    f->pending_tests |= 1u << T_WIFI;
+  const int live[] = {T_ETH0, T_ETH1, T_USB1, T_USB2, T_TYPEC, T_HDMI};
   for (size_t i = 0; i < sizeof(live) / sizeof(live[0]); i++)
     live_result(f, live[i]);
   for (int i = 0; i < ACTIVE_TEST_COUNT; i++) {
@@ -988,7 +990,7 @@ static int start_job(struct factory *f, int id, int automatic) {
     signal(SIGINT, terminate_job);
     stopping = 0;
     int rc = -1;
-    if (automatic && ((id >= T_CSI1 && id <= T_CSI3) || id == T_USB1 ||
+    if (automatic && ((id >= T_CSI1 && id <= T_CSI3) || id == T_WIFI || id == T_USB1 ||
                       id == T_USB2 || id == T_ETH0 || id == T_ETH1))
       rc = auto_worker(f, id);
     else if (id <= T_HEADSET_MIC)
@@ -1059,6 +1061,12 @@ void factory_poll(struct factory *f) {
     t->state = ok ? (t->automatic ? PASS : READY) : FAIL;
     t->checked = ok;
     read_text(f->log_path, t->evidence, sizeof(t->evidence));
+    if (f->job_test == T_WIFI && !ok) {
+      t->state = UNKNOWN;
+      t->automatic = 0;
+      t->auto_waiting = 1;
+      f->wifi_retry_at = seconds() + 15;
+    }
     copy(f->message, sizeof(f->message),
          ok ? "操作完成，请根据实际声音/画面/机械动作确认结果。"
             : "操作失败，详见当前项证据与运行日志。");

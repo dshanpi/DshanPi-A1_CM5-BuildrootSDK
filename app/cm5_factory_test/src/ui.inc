@@ -129,6 +129,7 @@ static void draw_ui(struct app *a, cairo_t *cr) {
     text(cr,
          t->state == PASS && !t->detected && t->require_detection
              ? "通过 · 已拔出"
+         : i == T_WIFI && t->detected && t->auto_waiting ? "等待热点"
          : t->auto_waiting ? "等待接入"
                            : factory_state_name(t->state),
          x + 14, y + 62, TEST_TILE_WIDTH - 28, 18, 1,
@@ -250,7 +251,7 @@ static void perform_action(struct app *a, int action) {
       break;
     }
     if (id == T_ETH0 || id == T_ETH1 || id == T_USB1 || id == T_USB2 ||
-        id == T_TYPEC || id == T_HDMI || id == T_WIFI) {
+        id == T_TYPEC || id == T_HDMI) {
       factory_scan(&a->factory);
       break;
     }

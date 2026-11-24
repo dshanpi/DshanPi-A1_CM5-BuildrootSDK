@@ -1,7 +1,7 @@
 #include <cairo/cairo.h>
 /* Automatic measurements. Every green verdict names its limited scope. */
 static int auto_kind(int id) {
-  if (id == T_BOARD_MIC || id == T_TF || id == T_M2_0 || id == T_M2_1 ||
+  if (id == T_WIFI || id == T_BOARD_MIC || id == T_TF || id == T_M2_0 || id == T_M2_1 ||
       (id >= T_CSI1 && id <= T_CSI3))
     return 1;
   return id == T_SPEAKER ? 2 : 0;
@@ -12,7 +12,7 @@ const char *factory_auto_scope(int id) {
   if (id >= T_CSI1 && id <= T_CSI3)
     return "five_frames_spatial_signal";
   if (id == T_WIFI)
-    return "onboard_sdio_wifi_link";
+    return "onboard_sdio_wifi_scan";
   if (id == T_ETH0 || id == T_ETH1)
     return "physical_link_carrier";
   if (id == T_USB1 || id == T_USB2 || id == T_TYPEC)
@@ -99,7 +99,33 @@ out:
   video_capture_destroy(v);
   return rc;
 }
+static int wifi_scan(void) {
+  FILE *scan = popen("/usr/sbin/iw dev wlan0 scan", "r");
+  if (!scan)
+    return -1;
+  char *line = NULL;
+  size_t size = 0;
+  unsigned count = 0;
+  while (getline(&line, &size, scan) >= 0)
+    if (!strncmp(line, "BSS ", 4))
+      count++;
+  free(line);
+  int complete = feof(scan) && !ferror(scan);
+  if (pclose(scan) != 0 || !complete) {
+    puts("无线扫描未完成，稍后重试。");
+    return -1;
+  }
+  if (!count) {
+    puts("暂未扫到热点，请检查天线和附近热点。");
+    return -1;
+  }
+  printf("板载 wlan0 扫描到 %u 个无线接入点。\n", count);
+  return 0;
+}
+
 static int auto_worker(struct factory *f, int id) {
+  if (id == T_WIFI)
+    return wifi_scan();
   return id >= T_CSI1 && id <= T_CSI3 ? camera_auto(f, id) : -1;
 }
 static const char *auto_missing(struct factory *f, int id) {

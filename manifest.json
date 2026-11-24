@@ -53,7 +53,7 @@
   },
   "app/cm5_factory_test/src/auto.inc": {
     "mode": "0644",
-    "sha256": "ac73b8f2b1902b19739e88357cbdc03dfe399b0d5de8ba3806d57de1d47ebc19"
+    "sha256": "2cda58dfa6af23bffaebd289ef855fc5c0edde593110fcf4e89388369d07eb13"
   },
   "app/cm5_factory_test/src/checks.c": {
     "mode": "0644",
@@ -65,11 +65,11 @@
   },
   "app/cm5_factory_test/src/factory.c": {
     "mode": "0644",
-    "sha256": "03cae6f85de0cb6b6aea1a88df8ddfd0885c4e671f4ee567a19c8c96c68308f3"
+    "sha256": "3cf3a0cf375390056145cd465887336c08f0235eba4393f0694616d1690adef9"
   },
   "app/cm5_factory_test/src/factory.h": {
     "mode": "0644",
-    "sha256": "66d2719dfc089b0e10e068b8813350eaa5754326c27fdcd9ea6829f0434e9d2c"
+    "sha256": "efc8a0d5710ed52b0bed6d6d86dd6a252a27705cee76d88d4b378ce752bc0fc8"
   },
   "app/cm5_factory_test/src/hardware.c": {
     "mode": "0644",
@@ -93,7 +93,7 @@
   },
   "app/cm5_factory_test/src/ui.inc": {
     "mode": "0644",
-    "sha256": "3b92bfd42cf021a26f7f20f1582181f6158a59f978795fe35a97668edac84995"
+    "sha256": "db89895735ef074d4739b04f99a287d6a6642b4b0f3d0f6b28e4d1c8fe615fbf"
   },
   "app/cm5_factory_test/src/usb.inc": {
     "mode": "0644",
@@ -149,7 +149,7 @@
   },
   "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/bin/cm5-factory-test": {
     "mode": "0755",
-    "sha256": "0703c66831e856e922873901d28a52eb9f21f6deae5b2e3987f20143057bdffc"
+    "sha256": "66083670ce1caf9f630d7832b68fc4d0c445284caa16466731f30d77b7fb8086"
   },
   "device/rockchip/.chips/rk3576/overlays/cm5-factory-test/usr/bin/cm5-ov13850-preview": {
     "mode": "0755",

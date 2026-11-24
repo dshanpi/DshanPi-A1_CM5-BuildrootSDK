@@ -11,6 +11,8 @@ cd ~
 git clone --single-branch --branch cm5-board-20261123 https://github.com/dshanpi/DshanPi-A1_CM5-BuildrootSDK.git cm5-board
 ```
 
+已有本分支的干净工作副本时，运行 `git -C ~/cm5-board pull --ff-only` 获取更新，然后重新执行第 2 步。
+
 ## 2. 应用配置
 
 脚本会校验文件，并在 SDK 的 `.cm5-board-backup/` 下保存首次覆盖前的板级文件。
@@ -52,6 +54,8 @@ ls -lhL output/firmware/update.img
 
 使用 MIPI 小屏时，先接 12 V 电源，待小屏显示后再接电脑 USB-C 数据线。系统进入桌面后会自动打开产测界面。产测报告保存在板上的 `/userdata/cm5-factory-reports/`。
 
+**板载 Wi-Fi**：装好天线，在附近开启一个热点。产测程序使用板载 `wlan0` 扫描，发现至少一个无线接入点即显示“通过”，无需输入热点密码。未扫到热点或扫描出错时会自动重试。报告中的 `onboard_sdio_wifi_scan` 记录本次扫描及发现的接入点数量。
+
 ## 恢复原有板级配置
 
 运行以下命令可恢复首次应用前的板级文件，并移除脚本新增的文件。恢复范围以备份清单为准。随后重新选择原配置并编译，已有镜像需重新生成。
@@ -62,7 +66,7 @@ ls -lhL output/firmware/update.img
 
 ## 恢复整套 SDK 到发布基线
 
-需要重新开始开发时，将发布资料中的 `100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz` 和 [SHA-256 校验文件](docs/baselines/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz.sha256) 放在同一目录。基线包约 8.33 GiB，解压约需 15 GiB，已包含本版 DshanPI A1 CM5 板级配置、交叉工具链和 Buildroot 下载缓存。
+需要重新开始开发时，将发布资料中的 `100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz` 和 [SHA-256 校验文件](docs/baselines/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz.sha256) 放在同一目录。基线包约 8.33 GiB，解压约需 15 GiB，包含 2026-11-23 发布时的板级配置、交叉工具链和 Buildroot 下载缓存。
 
 在 Ubuntu 上运行以下命令。示例假设下载文件放在 `~/Downloads/`，恢复目标 `~/cm5-sdk-restored` 尚不存在。
 
@@ -70,6 +74,13 @@ ls -lhL output/firmware/update.img
 ~/cm5-board/scripts/restore-sdk-baseline.sh ~/Downloads/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz ~/cm5-sdk-restored
 ```
 
-脚本会先核对 SHA-256，再解压到新目录，原工作目录中的修改会保留。进入 `~/cm5-sdk-restored` 后，按上文“编译固件”选择配置并编译。
+脚本会先核对 SHA-256，再解压到新目录。要编入本分支的 Wi-Fi 扫描产测，请把最新差分包应用到恢复的目录。
+
+```bash
+~/cm5-board/scripts/apply-cm5-diff.sh ~/cm5-sdk-restored
+cd ~/cm5-sdk-restored
+```
+
+在该目录按第 3 步选择板级配置、编译并打包。
 
 差分文件按 SDK 路径存放在仓库根目录。各目录的用途见[差分清单](docs/CM5_DIFF_MANIFEST.md)。

@@ -63,6 +63,7 @@ struct factory {
   unsigned int revision;
   char artifact_dir[512];
   double job_started;
+  double wifi_retry_at;
   unsigned long session_id;
 };
 void factory_init(struct factory *f);
