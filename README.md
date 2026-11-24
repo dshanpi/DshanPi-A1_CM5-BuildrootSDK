@@ -7,20 +7,26 @@
 先将配套 SDK 解压到 `~/100ask-rk3576_SDK`。在 Ubuntu 编译主机打开终端，克隆仓库即可获取默认分支 `main` 的板级配置。
 
 ```bash
-git clone --depth 1 https://github.com/dshanpi/DshanPi-A1_CM5-BuildrootSDK.git ~/cm5-board
+git clone --depth 1 https://github.com/dshanpi/DshanPi-A1_CM5-BuildrootSDK.git ~/DshanPi-A1_CM5-BuildrootSDK
 ```
 
-以后运行 `git -C ~/cm5-board pull --ff-only` 获取主分支更新，再按第 2 步应用到 SDK。
+以后运行 `git -C ~/DshanPi-A1_CM5-BuildrootSDK pull --ff-only` 获取主分支更新，再按第 2 步应用到 SDK。
 
 <details>
-<summary>旧版用户如何切换到主分支</summary>
+<summary>旧版用户如何更新目录名和分支</summary>
 
-如果之前按教程单独克隆了日期分支，在工作区干净时执行以下命令。第一条让 Git 跟踪主分支，后两条下载并切换到 `main`。
+如果原仓库位于 `~/cm5-board`，先将它改为仓库同名目录。
 
 ```bash
-git -C ~/cm5-board remote set-branches origin main
-git -C ~/cm5-board fetch origin
-git -C ~/cm5-board switch main
+mv -T --no-clobber ~/cm5-board ~/DshanPi-A1_CM5-BuildrootSDK
+```
+
+如果之前单独克隆了日期分支，在工作区干净时执行以下命令。第一条让 Git 跟踪主分支，后两条下载并切换到 `main`。
+
+```bash
+git -C ~/DshanPi-A1_CM5-BuildrootSDK remote set-branches origin main
+git -C ~/DshanPi-A1_CM5-BuildrootSDK fetch origin
+git -C ~/DshanPi-A1_CM5-BuildrootSDK switch main
 ```
 
 </details>
@@ -30,7 +36,7 @@ git -C ~/cm5-board switch main
 脚本会校验文件，并在 SDK 的 `.cm5-board-backup/` 下保存首次覆盖前的板级文件。
 
 ```bash
-~/cm5-board/scripts/apply-cm5-diff.sh ~/100ask-rk3576_SDK
+~/DshanPi-A1_CM5-BuildrootSDK/scripts/apply-cm5-diff.sh ~/100ask-rk3576_SDK
 ```
 
 ## 3. 编译固件
@@ -73,7 +79,7 @@ ls -lhL output/firmware/update.img
 运行以下命令可恢复首次应用前的板级文件，并移除脚本新增的文件。恢复范围以备份清单为准。随后重新选择原配置并编译，已有镜像需重新生成。
 
 ```bash
-~/cm5-board/scripts/restore-cm5-diff.sh ~/100ask-rk3576_SDK
+~/DshanPi-A1_CM5-BuildrootSDK/scripts/restore-cm5-diff.sh ~/100ask-rk3576_SDK
 ```
 
 ## 恢复整套 SDK 到发布基线
@@ -83,13 +89,13 @@ ls -lhL output/firmware/update.img
 在 Ubuntu 上运行以下命令。示例假设下载文件放在 `~/Downloads/`，恢复目标 `~/cm5-sdk-restored` 尚不存在。
 
 ```bash
-~/cm5-board/scripts/restore-sdk-baseline.sh ~/Downloads/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz ~/cm5-sdk-restored
+~/DshanPi-A1_CM5-BuildrootSDK/scripts/restore-sdk-baseline.sh ~/Downloads/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz ~/cm5-sdk-restored
 ```
 
 脚本会先核对 SHA-256，再解压到新目录。要编入本分支的 Wi-Fi 扫描产测，请把最新差分包应用到恢复的目录。
 
 ```bash
-~/cm5-board/scripts/apply-cm5-diff.sh ~/cm5-sdk-restored
+~/DshanPi-A1_CM5-BuildrootSDK/scripts/apply-cm5-diff.sh ~/cm5-sdk-restored
 cd ~/cm5-sdk-restored
 ```
 
