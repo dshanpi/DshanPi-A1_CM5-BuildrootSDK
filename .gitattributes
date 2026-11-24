@@ -1,0 +1,4 @@
+* text=auto eol=lf
+/app/** -text
+/device/** -text
+/kernel-6.1/** -text

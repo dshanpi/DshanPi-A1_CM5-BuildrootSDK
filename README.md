@@ -1,0 +1,98 @@
+# DshanPI A1 CM5 Buildroot SDK 差分包
+
+本分支配合百问网发布的 `100ask-rk3576_SDK` 使用，适用于 DshanPI A1 CM5 底板、Buildroot 和 Linux 6.1.75。板级配置包含设备树、三路 OV13850 相机配置、YT8521 以太网 PHY 模块、板载无线初始化脚本，以及开机自启的产测程序和源码。
+
+## 1. 获取板级配置
+
+先将配套 SDK 解压到 `~/100ask-rk3576_SDK`。在 Ubuntu 编译主机打开终端，克隆仓库即可获取默认分支 `main` 的板级配置。
+
+```bash
+git clone --depth 1 https://github.com/dshanpi/DshanPi-A1_CM5-BuildrootSDK.git ~/cm5-board
+```
+
+以后运行 `git -C ~/cm5-board pull --ff-only` 获取主分支更新，再按第 2 步应用到 SDK。
+
+<details>
+<summary>旧版用户如何切换到主分支</summary>
+
+如果之前按教程单独克隆了日期分支，在工作区干净时执行以下命令。第一条让 Git 跟踪主分支，后两条下载并切换到 `main`。
+
+```bash
+git -C ~/cm5-board remote set-branches origin main
+git -C ~/cm5-board fetch origin
+git -C ~/cm5-board switch main
+```
+
+</details>
+
+## 2. 应用配置
+
+脚本会校验文件，并在 SDK 的 `.cm5-board-backup/` 下保存首次覆盖前的板级文件。
+
+```bash
+~/cm5-board/scripts/apply-cm5-diff.sh ~/100ask-rk3576_SDK
+```
+
+## 3. 编译固件
+
+使用配套的 Ubuntu 编译环境。U-Boot 的构建脚本需要主机上有 `python2`，可先运行 `python2 --version` 确认。
+
+进入 SDK，选择 DshanPI A1 CM5 配置。
+
+```bash
+cd ~/100ask-rk3576_SDK
+./build.sh defconfig:rockchip_rk3576_dshanpi-a1_cm5_defconfig
+```
+
+运行完整编译。
+
+```bash
+./build.sh
+```
+
+打包整机镜像。
+
+```bash
+./build.sh updateimg
+```
+
+编译完成后，查看用于整机烧录的镜像。
+
+```bash
+ls -lhL output/firmware/update.img
+```
+
+## 4. 启动与产测
+
+使用 MIPI 小屏时，先接 12 V 电源，待小屏显示后再接电脑 USB-C 数据线。系统进入桌面后会自动打开产测界面。产测报告保存在板上的 `/userdata/cm5-factory-reports/`。
+
+**板载 Wi-Fi**：装好天线，在附近开启一个热点。产测程序使用板载 `wlan0` 扫描，发现至少一个无线接入点即显示“通过”，无需输入热点密码。未扫到热点或扫描出错时会自动重试。报告中的 `onboard_sdio_wifi_scan` 记录本次扫描及发现的接入点数量。
+
+## 恢复原有板级配置
+
+运行以下命令可恢复首次应用前的板级文件，并移除脚本新增的文件。恢复范围以备份清单为准。随后重新选择原配置并编译，已有镜像需重新生成。
+
+```bash
+~/cm5-board/scripts/restore-cm5-diff.sh ~/100ask-rk3576_SDK
+```
+
+## 恢复整套 SDK 到发布基线
+
+需要重新开始开发时，将发布资料中的 `100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz` 和 [SHA-256 校验文件](docs/baselines/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz.sha256) 放在同一目录。基线包约 8.33 GiB，解压约需 15 GiB，包含 2026-11-23 发布时的板级配置、交叉工具链和 Buildroot 下载缓存。
+
+在 Ubuntu 上运行以下命令。示例假设下载文件放在 `~/Downloads/`，恢复目标 `~/cm5-sdk-restored` 尚不存在。
+
+```bash
+~/cm5-board/scripts/restore-sdk-baseline.sh ~/Downloads/100ask-rk3576_SDK-cm5-baseline-20261123.tar.gz ~/cm5-sdk-restored
+```
+
+脚本会先核对 SHA-256，再解压到新目录。要编入本分支的 Wi-Fi 扫描产测，请把最新差分包应用到恢复的目录。
+
+```bash
+~/cm5-board/scripts/apply-cm5-diff.sh ~/cm5-sdk-restored
+cd ~/cm5-sdk-restored
+```
+
+在该目录按第 3 步选择板级配置、编译并打包。
+
+差分文件按 SDK 路径存放在仓库根目录。各目录的用途见[差分清单](docs/CM5_DIFF_MANIFEST.md)。

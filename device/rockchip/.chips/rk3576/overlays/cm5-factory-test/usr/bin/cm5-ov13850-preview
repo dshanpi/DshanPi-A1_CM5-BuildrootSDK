@@ -1,0 +1,39 @@
+#!/bin/sh
+# FPC6 on CM5 Base V1.2. Display the ISP's NV12 output through Weston.
+set -eu
+export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/var/run}
+export WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-0}
+pidfile=/run/cm5-ov13850-preview.pid
+log=/tmp/cm5-ov13850-preview.log
+name=cm5_ov13850_preview
+running() {
+    [ -r "$pidfile" ] || return 1
+    read -r pid < "$pidfile" || return 1
+    case $pid in ''|*[!0-9]*) return 1 ;; esac
+    [ -r "/proc/$pid/cmdline" ] &&
+        tr '\000' '\n' < "/proc/$pid/cmdline" | grep -Fxq "name=$name"
+}
+case ${1:-start} in
+    start)
+        if running; then echo "Preview already running (PID $pid)"; exit 0; fi
+        [ -c /dev/video42 ] && [ -S "$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY" ] ||
+            { echo 'FPC6 or Weston unavailable' >&2; exit 1; }
+        nohup gst-launch-1.0 -q v4l2src name="$name" device=/dev/video42 io-mode=mmap \
+            ! 'video/x-raw,format=NV12,width=640,height=480' \
+            ! queue max-size-buffers=2 leaky=downstream \
+            ! waylandsink fullscreen=true sync=false </dev/null >"$log" 2>&1 &
+        echo "$!" > "$pidfile"
+        sleep 1
+        running || { cat "$log" >&2; exit 1; }
+        echo "FPC6 live preview running (PID $pid)"
+        ;;
+    stop)
+        if running; then kill -TERM "$pid"; fi
+        rm -f "$pidfile"
+        ;;
+    status)
+        running && { echo "Preview running (PID $pid)"; exit 0; }
+        echo 'Preview stopped'; exit 1
+        ;;
+    *) echo "Usage: $0 [start|stop|status]" >&2; exit 2 ;;
+esac

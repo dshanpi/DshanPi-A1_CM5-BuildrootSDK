@@ -1,0 +1,28 @@
+#!/bin/sh
+# Load the missing YT8521 driver before S40network, without resetting interfaces.
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+start()
+{
+    # A future kernel may provide YT8521 itself. Leave its driver in charge.
+    for driver in /sys/bus/mdio_bus/drivers/*YT8521*; do
+        [ -d "$driver" ] && return 0
+    done
+    found=0
+    for phy in /sys/bus/mdio_bus/devices/*/phy_id; do
+        [ -r "$phy" ] || continue
+        read -r id < "$phy"
+        [ "$id" = "0x0000011a" ] && found=1
+    done
+    [ "$found" = 1 ] || return 0
+    module=/lib/modules/$(uname -r)/extra/cm5_yt8521.ko
+    [ -r "$module" ] || { echo "CM5 YT8521 module missing: $module" >&2; return 1; }
+    echo "Loading CM5 YT8521 PHY driver before networking"
+    insmod "$module"
+}
+case "${1:-}" in
+    start|restart) start ;;
+    stop) : ;; # Keep the live PHY driver loaded to preserve network access.
+    status) ls /sys/bus/mdio_bus/drivers/*YT8521* >/dev/null 2>&1 ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" >&2; exit 1 ;;
+esac

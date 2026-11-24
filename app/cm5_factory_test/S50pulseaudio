@@ -1,0 +1,18 @@
+#!/bin/sh
+# Keep PulseAudio databases/cookies off /userdata; they are regenerated at boot.
+export PULSE_HOME=/var/run/cm5-pulse
+case "$1" in
+    start)
+        mkdir -p "$PULSE_HOME" || exit 1
+        chmod 700 "$PULSE_HOME" || exit 1
+        echo "Starting PulseAudio with volatile state"
+        /usr/bin/pulseaudio --daemonize=yes --exit-idle-time=-1 --log-target=syslog
+        ;;
+    stop)
+        start-stop-daemon -K -o -x /usr/bin/pulseaudio
+        ;;
+    restart|reload)
+        "$0" stop && "$0" start
+        ;;
+    *) echo "Usage: $0 {start|stop|restart}" >&2; exit 1 ;;
+esac

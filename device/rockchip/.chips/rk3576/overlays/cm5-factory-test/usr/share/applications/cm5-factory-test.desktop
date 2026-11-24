@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=CM5 底板测试
+Comment=RK3576 CM5 底板测试与报告
+Exec=/etc/init.d/S98cm5-factory-test start
+Icon=cm5-factory-test
+Terminal=false
+Categories=System;
+StartupNotify=false
